@@ -37,8 +37,15 @@ namespace ElevenNote.WebMVC.Controllers
                 return View(model);
             }
             var service = CreateNoteService();
-            service.CreateNote(model);
-            return RedirectToAction("Index");
+
+            if(service.CreateNote(model))
+
+            {
+                TempData["SaveResult"] = " Your note was created.";
+                return RedirectToAction("Index"); 
+            }
+            ModelState.AddModelError("", "Note could not be created");
+            return View(model);
         }
 
         private NoteService CreateNoteService()
